@@ -34,7 +34,7 @@ RUN chmod +x ${ENV_DIR}/scripts/continue.sh
 
 # chown home directory
 WORKDIR /home/${USER}
-RUN chown -R ${USER}:${USER} ../
+RUN chown -R ${USER}:${USER} ../${USER}
 
 # set volume
 VOLUME ${ENV_DIR}/files
