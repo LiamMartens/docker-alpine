@@ -2,9 +2,11 @@ FROM alpine:3.6
 LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
 # set default shell, own by and own dirs variables
+ARG USER='www-data'
+ARG ENV_DIR=/home/docker
+# environment
 ENV SHELL=/bin/bash
-ENV USER='www-data'
-ENV ENV_DIR=/home/docker
+ENV ENV_DIR=${ENV_DIR}
 ENV OWN_BY=':www-data'
 ENV OWN_DIRS=${ENV_DIR}
 
