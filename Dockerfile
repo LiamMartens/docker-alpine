@@ -6,6 +6,7 @@ ARG USER='www-data'
 ARG ENV_DIR=/home/docker
 # environment
 ENV SHELL=/bin/bash
+ENV USER=${USER}
 ENV ENV_DIR=${ENV_DIR}
 ENV OWN_BY=':www-data'
 ENV OWN_DIRS=${ENV_DIR}
