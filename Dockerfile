@@ -31,10 +31,13 @@ ONBUILD RUN touch /etc/timezone /etc/localtime && \
 ONBUILD RUN mkdir ${ENV_DIR} ${ENV_DIR}/scripts ${ENV_DIR}/files
 # copy script files
 # copy run files
-ONBUILD COPY scripts/run.sh ${ENV_DIR}/scripts/run.sh
-ONBUILD RUN chmod +x ${ENV_DIR}/scripts/run.sh
-ONBUILD COPY scripts/continue.sh ${ENV_DIR}/scripts/continue.sh
-ONBUILD RUN chmod +x ${ENV_DIR}/scripts/continue.sh
+COPY scripts/run.sh /run.sh
+RUN chmod +x run.sh
+COPY scripts/continue.sh continue.sh
+RUN chmod +x continue.sh
+# onbuild move the script and continue files
+ONBUILD RUN mv /run.sh ${ENV_DIR}/scripts/run.sh
+ONBUILD RUN mv /continue.sh ${ENV_DIR}/scripts/continue.sh
 
 # chown home directory
 ONBUILD WORKDIR /home/${USER}
