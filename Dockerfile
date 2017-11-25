@@ -1,43 +1,46 @@
 FROM alpine:3.6
 LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
+# all statements are onbuild as this is meant to be used as a baseimage
+
 # set default shell, own by and own dirs variables
-ARG USER='www-data'
-ARG ENV_DIR=/home/docker
-# environment
+ONBUILD ARG USER
+ONBUILD ARG ENV_DIR
+# environment on build
+ONBUILD ENV USER=${USER:-www-data}
+ONBUILD ENV ENV_DIR=${ENV_DIR:-/home/docker}
+ONBUILD ENV OWN_DIRS=${ENV_DIR}
+ONBUILD ENV OWN_BY=":${USER}"
+# other environment to override after base image build
 ENV SHELL=/bin/bash
-ENV USER=${USER}
-ENV ENV_DIR=${ENV_DIR}
-ENV OWN_BY=':www-data'
-ENV OWN_DIRS=${ENV_DIR}
 
 # run updates
-RUN apk update && apk upgrade
+ONBUILD RUN apk update && apk upgrade
 
 # add default packages
-RUN apk add tzdata perl curl bash nano git
+ONBUILD RUN apk add tzdata perl curl bash nano git
 
 # add $USER user
-RUN adduser -D ${USER}
+ONBUILD RUN adduser -D ${USER}
 
 # chown timezone files
-RUN touch /etc/timezone /etc/localtime && \
+ONBUILD RUN touch /etc/timezone /etc/localtime && \
     chown ${USER}:${USER} /etc/localtime /etc/timezone
 
 # set workdir
-RUN mkdir ${ENV_DIR} ${ENV_DIR}/scripts ${ENV_DIR}/files
+ONBUILD RUN mkdir ${ENV_DIR} ${ENV_DIR}/scripts ${ENV_DIR}/files
 # copy script files
 # copy run files
-COPY scripts/run.sh ${ENV_DIR}/scripts/run.sh
-RUN chmod +x ${ENV_DIR}/scripts/run.sh
-COPY scripts/continue.sh ${ENV_DIR}/scripts/continue.sh
-RUN chmod +x ${ENV_DIR}/scripts/continue.sh
+ONBUILD COPY scripts/run.sh ${ENV_DIR}/scripts/run.sh
+ONBUILD RUN chmod +x ${ENV_DIR}/scripts/run.sh
+ONBUILD COPY scripts/continue.sh ${ENV_DIR}/scripts/continue.sh
+ONBUILD RUN chmod +x ${ENV_DIR}/scripts/continue.sh
 
 # chown home directory
-WORKDIR /home/${USER}
-RUN chown -R ${USER}:${USER} ../${USER}
+ONBUILD WORKDIR /home/${USER}
+ONBUILD RUN chown -R ${USER}:${USER} ../${USER}
 
 # set volume
-VOLUME ${ENV_DIR}/files
+ONBUILD VOLUME ${ENV_DIR}/files
 # set entrypoint
-ENTRYPOINT ${ENV_DIR}/scripts/run.sh su -m ${USER} -c ${ENV_DIR}/scripts/continue.sh
+ONBUILD ENTRYPOINT ${ENV_DIR}/scripts/run.sh su -m ${USER} -c ${ENV_DIR}/scripts/continue.sh
