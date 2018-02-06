@@ -3,15 +3,13 @@ LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
 # @arg USER This will contain the name of the non-root user that will be added
 ONBUILD ARG USER
+# @arg SHELL The default shell to be used
+ONBUILD ARG SHELL
 
 # @env USER This will contain the name of the non-root user that will be added
 ONBUILD ENV USER=${USER:-user}
-# @env OWN_DIRS This is a list of directories that should be chown'd upon start
-ONBUILD ENV OWN_DIRS=${DOCKER_DIR}
-# @env OWN_BY This is the chown user and group that will be used for chown upon start
-ONBUILD ENV OWN_BY=":${USER}"
 # @env SHELL The default shell to use
-ONBUILD ENV SHELL=/bin/bash
+ONBUILD ENV SHELL=${SHELL:-/bin/bash}
 
 # @run Update the alpine image
 ONBUILD RUN apk update && apk upgrade
@@ -27,15 +25,6 @@ ONBUILD RUN touch /etc/timezone /etc/localtime
 
 # @run chown the timezone files
 ONBUILD RUN chown ${USER}:${USER} /etc/timezone /etc/localtime
-
-# @env DOCKER_DIR This is the directory where the run scripts will be stored
-ENV DOCKER_DIR=${DOCKER_DIR:-/home/.docker}
-
-# @run create docker dir
-RUN mkdir ${DOCKER_DIR}
-
-# @workdir Set the workdir to the docker dir
-WORKDIR ${DOCKER_DIR}
 
 # @copy Copy the run files
 COPY .docker/* /usr/local/bin
