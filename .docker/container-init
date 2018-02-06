@@ -1,0 +1,15 @@
+#!/bin/bash
+echo $(whoami) > /home/.docker/whoami
+echo ${SHELL} > /home/.docker/shell
+
+chown -R $OWN_BY $OWN_DIRS
+chmod -R g+ws $OWN_DIRS
+
+if [ -z "$TIMEZONE" ]; then
+    export TIMEZONE='UTC'
+fi
+cat /usr/share/zoneinfo/$TIMEZONE > /etc/localtime
+echo $TIMEZONE > /etc/timezone
+
+# switch to non-root user
+su ${USER} -c "$@"
