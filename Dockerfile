@@ -34,6 +34,24 @@ ONBUILD RUN chown ${USER}:${USER} /etc/timezone /etc/localtime
 ONBUILD RUN cat /usr/share/zoneinfo/${TIMEZONE} > /etc/localtime
 ONBUILD RUN echo ${TIMEZONE} > /etc/timezone
 
+# @arg DOCKER_DIR The docker scripts directory
+ARG DOCKER_DIR
+
+# @env DOCKER_DIR The docker scripts directory
+ENV DOCKER_DIR=${DOCKER_DIR:-/home/.docker}
+
+# @run Create docker directory
+RUN mkdir -p ${DOCKER_DIR}
+
+# @copy Copy .docker file(s)
+COPY .docker/ ${DOCKER_DIR}
+
+# @run Chown .docker directory
+ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR}
+
+# @run Make docker script(s) executable
+ONBUILD RUN chmod -R +x ${DOCKER_DIR}
+
 # @user Set user
 ONBUILD USER ${USER}
 
