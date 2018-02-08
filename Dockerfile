@@ -52,8 +52,11 @@ ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR}
 # @run Make docker script(s) executable
 ONBUILD RUN chmod -R +x ${DOCKER_DIR}
 
+# @run Link global container-init
+RUN ln -s ${DOCKER_DIR}/.container-init /usr/local/bin/container-init
+
 # @user Set user
 ONBUILD USER ${USER}
 
 # @entrypoint
-ONBUILD ENTRYPOINT ${DOCKER_DIR}/.container-init
+ONBUILD ENTRYPOINT [ "container-init" ]
