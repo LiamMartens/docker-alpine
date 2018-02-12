@@ -1,3 +1,5 @@
 #!/bin/bash
-run-parts $DOCKER_DIR
+for s in $DOCKER_DIR; do
+    source $s
+done
 $SHELL "$@"
