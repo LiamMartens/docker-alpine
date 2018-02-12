@@ -1,5 +1,5 @@
 #!/bin/bash
-for s in $DOCKER_DIR; do
+for s in $DOCKER_DIR/*; do
     source $s
 done
 $SHELL "$@"
