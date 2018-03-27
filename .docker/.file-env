@@ -1,0 +1,22 @@
+#!/bin/bash
+
+VAR="$1"
+FILE_VAR="${VAR}_FILE"
+DEF="${2:-}"
+
+if [ "${!VAR:-}" ] && [ "${!FILE_VAR:-}" ]; then
+    echo >&2 "error: both $VAR and $FILE_VAR are set (but are not exclusive)"
+    exit 1
+fi
+
+VAL="$DEF"
+if [ "${!VAR:-}" ]; then
+    VAL="${!VAR}"
+elif [ "${!FILE_VAR:-}" ]; then
+    VAL="$(< "${!FILE_VAR}")"
+fi
+
+export "$VAR"="$VAL"
+
+unset $FILE_VAR
+unset $VAL
