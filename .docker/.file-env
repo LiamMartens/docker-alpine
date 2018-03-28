@@ -3,6 +3,6 @@
 VAR="$1"
 FILE_VAR="${VAR}_FILE"
 
-if [ -z "${!VAR:-}" ] && [ -f "${!FILE_VAR:-}" ]; then
+if [ ! -z "${!FILE_VAR:-}" ] && [ -f "${!FILE_VAR:-}" ]; then
     export "$VAR"=$(cat "${!FILE_VAR:-}")
 fi
