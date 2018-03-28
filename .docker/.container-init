@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ -f $DOCKER_DIR/* ]; then
     for s in $DOCKER_DIR/*; do
         source $s
