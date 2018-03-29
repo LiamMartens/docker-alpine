@@ -3,6 +3,8 @@ LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
 # @arg USER This will contain the name of the non-root user that will be added
 ONBUILD ARG USER
+# @arg ID This will contain the deafult user and group id
+ONBUILD ARG ID
 # @arg SHELL The default shell to be used
 ONBUILD ARG SHELL
 # @arg TIMEZONE The timezone to use in the container
@@ -10,6 +12,8 @@ ONBUILD ARG TIMEZONE
 
 # @env USER This will contain the name of the non-root user that will be added
 ONBUILD ENV USER=${USER:-user}
+# @env ID This will contain the id to use for the non-root user and group
+ONBUILD ENV ID=${ID:-1000}
 # @env SHELL The default shell to use
 ONBUILD ENV SHELL=${SHELL:-/bin/bash}
 # @env TIMEZONE The timezone to use
@@ -21,8 +25,11 @@ ONBUILD RUN apk update && apk upgrade
 # @run Add default packages
 ONBUILD RUN apk add tzdata perl curl bash nano git
 
+# @run Add group
+ONBUILD RUN addgroup -g ${ID} ${USER}
+
 # @run Add the non-root user
-ONBUILD RUN adduser -D ${USER}
+ONBUILD RUN adduser -D -G ${USER} -u ${ID} ${USER}
 
 # @run Create the timezone files
 ONBUILD RUN touch /etc/timezone /etc/localtime
