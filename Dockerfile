@@ -45,22 +45,24 @@ ONBUILD RUN echo ${TIMEZONE} > /etc/timezone
 ARG DOCKER_DIR
 
 # @env DOCKER_DIR The docker scripts directory
-ENV DOCKER_DIR=${DOCKER_DIR:-/home/.docker}
+ENV DOCKER_DIR=${DOCKER_DIR:-/opt/docker}
+ENV DOCKER_PROVISION_DIR=${DOCKER_DIR}/provision
+ENV DOCKER_ETC_DIR=${DOCKER_DIR}/etc
+ENV DOCKER_BIN_DIR=${DOCKER_DIR}/bin
+ENV PATH=${PATH}:${DOCKER_BIN_DIR}
 
 # @run Create docker directory
-RUN mkdir -p ${DOCKER_DIR}
+RUN mkdir -p ${DOCKER_DIR} ${DOCKER_PROVISION_DIR} ${DOCKER_ETC_DIR} ${DOCKER_BIN_DIR}
 
 # @copy Copy .docker file(s)
 COPY .docker/ ${DOCKER_DIR}
 
-# @run Chown .docker directory
+# @run chown and chmod .docker directory
 ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR}
+ONBUILD RUN chmod -R 750 ${USER}:${USER} ${DOCKER_DIR}
 
 # @run Make docker script(s) executable
-ONBUILD RUN chmod -R +x ${DOCKER_DIR}
-
-# @run Link global container-init
-RUN ln -s ${DOCKER_DIR}/.container-init /usr/local/bin/container-init
+ONBUILD RUN chmod -R +x ${DOCKER_PROVISION_DIR} ${DOCKER_DIR}
 
 # @user Set user
 ONBUILD USER ${USER}

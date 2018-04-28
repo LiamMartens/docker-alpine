@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f $DOCKER_PROVISION_DIR/* ]; then
+    for s in $DOCKER_PROVISION_DIR/*; do
+        source $s
+    done
+fi
+$SHELL "$@"
