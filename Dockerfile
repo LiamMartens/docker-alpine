@@ -23,7 +23,7 @@ ONBUILD ENV TIMEZONE=${TIMEZONE:-UTC}
 ONBUILD RUN apk update && apk upgrade
 
 # @run Add default packages
-ONBUILD RUN apk add tzdata perl curl bash nano git
+ONBUILD RUN apk add tzdata perl curl bash nano git supervisor%(ENV_VARNAME)s
 
 # @run Add group
 ONBUILD RUN addgroup -g ${ID} ${USER}
@@ -49,6 +49,7 @@ ENV DOCKER_DIR=${DOCKER_DIR:-/opt/docker}
 ENV DOCKER_PROVISION_DIR=${DOCKER_DIR}/provision
 ENV DOCKER_ETC_DIR=${DOCKER_DIR}/etc
 ENV DOCKER_BIN_DIR=${DOCKER_DIR}/bin
+ENV DOCKER_TMP_DIR=${DOCKER_DIR}/tmp
 ENV PATH=${PATH}:${DOCKER_BIN_DIR}
 
 # @run Create docker directory
@@ -58,8 +59,8 @@ RUN mkdir -p ${DOCKER_DIR} ${DOCKER_PROVISION_DIR} ${DOCKER_ETC_DIR} ${DOCKER_BI
 COPY .docker/ ${DOCKER_DIR}
 
 # @run chown and chmod .docker directory
-ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR}
-ONBUILD RUN chmod -R 750 ${USER}:${USER} ${DOCKER_DIR}
+ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR} ${DOCKER_TMP_DIR}
+ONBUILD RUN chmod -R 750 ${USER}:${USER} ${DOCKER_DIR} ${DOCKER_TMP_DIR}
 
 # @run Make docker script(s) executable
 ONBUILD RUN chmod -R +x ${DOCKER_PROVISION_DIR} ${DOCKER_DIR}
