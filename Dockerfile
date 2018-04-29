@@ -53,7 +53,7 @@ ENV DOCKER_TMP_DIR=${DOCKER_DIR}/tmp
 ENV PATH=${PATH}:${DOCKER_BIN_DIR}
 
 # @run Create docker directory
-RUN mkdir -p ${DOCKER_DIR} ${DOCKER_PROVISION_DIR} ${DOCKER_ETC_DIR} ${DOCKER_BIN_DIR}
+RUN mkdir -p ${DOCKER_DIR} ${DOCKER_PROVISION_DIR} ${DOCKER_ETC_DIR} ${DOCKER_BIN_DIR} ${DOCKER_TMP_DIR}
 
 # @copy Copy .docker file(s)
 COPY .docker/ ${DOCKER_DIR}
