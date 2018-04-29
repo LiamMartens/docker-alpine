@@ -72,4 +72,4 @@ ONBUILD USER ${USER}
 ONBUILD ENTRYPOINT [ "container-init" ]
 
 # @cmd
-ONBUILD CMD [ "-i", "-c", "supervisord", "-c", "${DOCKER_ETC_DIR}/supervisord.conf" ]
+ONBUILD CMD [ "-i", "-c", "supervisord -c ${DOCKER_ETC_DIR}/supervisord.conf" ]
