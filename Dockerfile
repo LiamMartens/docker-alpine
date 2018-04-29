@@ -23,7 +23,7 @@ ONBUILD ENV TIMEZONE=${TIMEZONE:-UTC}
 ONBUILD RUN apk update && apk upgrade
 
 # @run Add default packages
-ONBUILD RUN apk add tzdata perl curl bash nano git supervisor%(ENV_VARNAME)s
+ONBUILD RUN apk add tzdata perl curl bash nano git supervisor
 
 # @run Add group
 ONBUILD RUN addgroup -g ${ID} ${USER}
