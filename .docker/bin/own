@@ -1,0 +1,5 @@
+#!/bin/bash
+chown -R ${USER}:${USER} ${DOCKER_DIR}
+chmod -R 750 ${DOCKER_DIR}
+chmod +x ${DOCKER_BIN_DIR}
+chmod +x ${DOCKER_PROVISION_DIR}
