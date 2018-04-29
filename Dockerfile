@@ -59,8 +59,8 @@ RUN mkdir -p ${DOCKER_DIR} ${DOCKER_PROVISION_DIR} ${DOCKER_ETC_DIR} ${DOCKER_BI
 COPY .docker/ ${DOCKER_DIR}
 
 # @run chown and chmod .docker directory
-ONBUILD RUN chown ${USER}:${USER} ${DOCKER_DIR} ${DOCKER_TMP_DIR}
-ONBUILD RUN chmod -R 750 ${USER}:${USER} ${DOCKER_DIR} ${DOCKER_TMP_DIR}
+ONBUILD RUN chown -R ${USER}:${USER} ${DOCKER_DIR}
+ONBUILD RUN chmod -R 750 ${DOCKER_DIR}
 
 # @run Make docker script(s) executable
 ONBUILD RUN chmod -R +x ${DOCKER_PROVISION_DIR} ${DOCKER_DIR}
