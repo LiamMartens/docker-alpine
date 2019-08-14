@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.10
 LABEL maintainer="Liam Martens <hi@liammartens.com>"
 
 # @arg USER This will contain the name of the non-root user that will be added
